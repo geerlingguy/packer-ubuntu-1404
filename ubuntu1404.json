@@ -56,7 +56,7 @@
       ],
       "boot_wait": "10s",
       "disk_size": 20480,
-      "guest_os_type": "RedHat_64",
+      "guest_os_type": "Ubuntu_64",
       "headless": true,
       "http_directory": "http",
       "iso_urls": [
