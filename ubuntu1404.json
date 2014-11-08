@@ -13,12 +13,8 @@
     {
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
-      "extra_arguments": ["-vvvv"],
       "role_paths": [
-        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.packer-debian",
-        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.firewall",
-        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.ntp",
-        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.git"
+        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.packer-debian"
       ]
     },
     {

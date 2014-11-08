@@ -2,8 +2,13 @@
 - hosts: all
   sudo: yes
   gather_facts: yes
+
   roles:
-    - { role: geerlingguy.packer-debian, tags: ["packer"] }
-    - { role: geerlingguy.firewall, tags: ["system"] }
-    - { role: geerlingguy.ntp, tags: ["system"] }
-    - { role: geerlingguy.git, tags: ["system"] }
+    - geerlingguy.packer-debian
+
+  tasks:
+    - apt: "pkg={{ item }} state=installed"
+      with_items:
+        - git
+        - wget
+        - vim
