@@ -14,7 +14,8 @@
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
       "role_paths": [
-        "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.packer-debian"
+        "/etc/ansible/roles/geerlingguy.packer-debian",
+        "/etc/ansible/roles/geerlingguy.nfs"
       ]
     },
     {

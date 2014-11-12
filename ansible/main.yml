@@ -4,6 +4,7 @@
   gather_facts: yes
 
   roles:
+    - geerlingguy.nfs
     - geerlingguy.packer-debian
 
   tasks:
@@ -11,4 +12,5 @@
       with_items:
         - git
         - wget
+        - curl
         - vim
