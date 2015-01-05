@@ -8,7 +8,7 @@
     - geerlingguy.packer-debian
 
   tasks:
-    - apt: "pkg={{ item }} state=installed"
+    - apt: "name={{ item }} state=installed"
       with_items:
         - git
         - wget
