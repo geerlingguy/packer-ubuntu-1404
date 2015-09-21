@@ -1,6 +1,6 @@
 # Packer Example - Ubuntu 14.04 minimal Vagrant Box
 
-**Current Ubuntu Version Used**: 14.04.1
+**Current Ubuntu Version Used**: 14.04.3
 
 This example build configuration installs and configures Ubuntu 14.04 x86_64 minimal using Ansible, and then generates two Vagrant box files, for:
 
