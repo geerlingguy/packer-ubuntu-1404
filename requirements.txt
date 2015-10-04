@@ -1,2 +1,6 @@
 geerlingguy.packer-debian
 geerlingguy.nfs
+geerlingguy.java
+geerlingguy.elasticsearch
+geerlingguy.nginx
+geerlingguy.nodejs

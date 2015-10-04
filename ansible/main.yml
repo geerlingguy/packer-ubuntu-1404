@@ -6,11 +6,59 @@
   roles:
     - geerlingguy.nfs
     - geerlingguy.packer-debian
+    - geerlingguy.java
+    - geerlingguy.elasticsearch
+    - geerlingguy.nginx
+    - geerlingguy.nodejs
 
   tasks:
-    - apt: "name={{ item }} state=installed"
+    - apt: name="{{ item }}"
+           state=installed
       with_items:
+        # libs
+        - gcc
+        - build-essential
+        - python-dev
+        - python-virtualenv
+        - python-setuptools
+        - libpq-dev
+        - libssl-dev
+        - libffi-dev
+        - libjpeg-dev
+        # middleware
+        - rabbitmq-server
+        - redis-server
+        - zookeeper
+        - zookeeperd
+        # tools
         - git
         - wget
         - curl
         - vim
+
+    - name: Middleware is running
+      service: name={{ item }}
+               state=started
+               enabled=yes
+      with_items:
+        - redis-server
+        - zookeeper
+
+    - name: Hosts are present
+      lineinfile: dest=/etc/hosts
+                  line="{{ item }}"
+      with_items:
+        - "127.0.0.1 rabbitmq"
+        - "127.0.0.1 zk"
+        - "127.0.0.1 es"
+        - "127.0.0.1 redis"
+
+    - name: Pip is present
+      shell: curl https://bootstrap.pypa.io/get-pip.py | python
+
+    - name: Virtualenv is present
+      pip: name=virtualenv
+           extra_args='-I'
+
+    - name: Motd is updated
+      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 15.04. Happy, developing :)' > /etc/motd"
