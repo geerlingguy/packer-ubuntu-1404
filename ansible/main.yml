@@ -61,4 +61,107 @@
            extra_args='-I'
 
     - name: Motd is updated
-      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 15.04. Happy, developing :)' > /etc/motd"
+      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
+
+    - name: Locales are set
+      become: yes
+      lineinfile: state=present
+                  dest=/etc/default/locale
+                  line="\"{{ item }}=en_US.UTF-8\""
+      with_items:
+        - LANG
+        - LANGUAGE
+        - LC_ALL
+    
+    - name: Locales are generated
+      become: yes
+      shell: "{{ item }}"
+      with_items:
+        - locale-gen en_US en_US.UTF-8
+        - dpkg-reconfigure locales
+      args:
+        creates: /var/lib/locales/supported.d/local
+
+- name: Postgres is stopped if running
+  become: yes
+  service: name=postgresql
+           state=stopped
+
+- name: Postgres packages are absent
+  become: yes
+  apt: name={{ item }}
+       state=absent
+       purge=yes
+  with_items:
+    - postgresql
+    - libpq-dev
+    - libpq5
+    - postgresql-client-common
+    - postgresql-common
+
+    - name: Postgres lib is removed
+      become: yes
+      file: name=/var/lib/postgresql
+            state=absent
+    
+    - name: Postgres packages are present
+      become: yes
+      apt: name={{ item }}
+      with_items:
+        - libpq-dev
+        - postgresql-9.4
+        - postgresql-contrib-9.4
+        - postgresql-9.4-postgis-2.1
+        - python-psycopg2
+    
+    - name: Postgres is running
+      become: yes
+      service: name=postgresql
+               state=started
+               enabled=yes
+    
+    - name: Get current user
+      shell: whoami
+      register: current_user
+    
+    - debug: var=current_user.stdout
+    
+    - name: Postgres user is present
+      become: yes
+      become_user: postgres
+      postgresql_user: name={{ current_user.stdout }}
+                       role_attr_flags=SUPERUSER
+    
+    - name: Postgres database is present
+      become: yes
+      become_user: postgres
+      postgresql_db: name={{ current_user.stdout }}
+    
+    - name: Postgres is present as host
+      become: yes
+      lineinfile: dest=/etc/hosts
+                  line="127.0.0.1 postgres"
+    
+    - name: Postgres allows connections from 127.0.0.1
+      become: yes
+      replace: dest=/etc/postgresql/9.4/main/pg_hba.conf
+               regexp='^(host\s+all\s+all\s+127.0.0.1/32\s+)md5$'
+               replace='\1trust'
+               backup=yes
+    
+    - name: Postgres allows connection from localhost
+      become: yes
+      lineinfile: dest=/etc/postgresql/9.4/main/pg_hba.conf
+                  line="host    all             all             localhost               trust"
+    
+    - name: Postgres has max prepared transactions
+      become: yes
+      lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf
+                  line="max_prepared_transactions = 10"
+    
+    # this should be a handler
+    - name: Postgres is restarted
+      become: yes
+      service: name=postgresql
+               state=restarted
+               enabled=yes
