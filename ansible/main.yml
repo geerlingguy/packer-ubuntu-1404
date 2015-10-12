@@ -37,7 +37,7 @@
         - vim
 
     - name: Middleware is running
-      service: name={{ item }}
+      service: name="{{ item }}"
                state=started
                enabled=yes
       with_items:
@@ -82,22 +82,22 @@
       args:
         creates: /var/lib/locales/supported.d/local
 
-- name: Postgres is stopped if running
-  become: yes
-  service: name=postgresql
-           state=stopped
-
-- name: Postgres packages are absent
-  become: yes
-  apt: name={{ item }}
-       state=absent
-       purge=yes
-  with_items:
-    - postgresql
-    - libpq-dev
-    - libpq5
-    - postgresql-client-common
-    - postgresql-common
+    - name: Postgres is stopped if running
+      become: yes
+      service: name=postgresql
+               state=stopped
+    
+    - name: Postgres packages are absent
+      become: yes
+      apt: name={{ item }}
+           state=absent
+           purge=yes
+      with_items:
+        - postgresql
+        - libpq-dev
+        - libpq5
+        - postgresql-client-common
+        - postgresql-common
 
     - name: Postgres lib is removed
       become: yes
