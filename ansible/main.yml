@@ -35,6 +35,7 @@
         - wget
         - curl
         - vim
+        - tmux
 
     - name: Middleware is running
       service: name="{{ item }}"
@@ -46,12 +47,13 @@
 
     - name: Hosts are present
       lineinfile: dest=/etc/hosts
-                  line="{{ item }}"
+                  line="127.0.0.1 {{ item }}"
       with_items:
-        - "127.0.0.1 rabbitmq"
-        - "127.0.0.1 zk"
-        - "127.0.0.1 es"
-        - "127.0.0.1 redis"
+        - es
+        - postgres
+        - rabbitmq
+        - redis
+        - zk
 
     - name: Pip is present
       shell: curl https://bootstrap.pypa.io/get-pip.py | python
@@ -59,9 +61,6 @@
     - name: Virtualenv is present
       pip: name=virtualenv
            extra_args='-I'
-
-    - name: Motd is updated
-      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
 
     - name: Locales are set
       become: yes
@@ -82,10 +81,13 @@
       args:
         creates: /var/lib/locales/supported.d/local
 
-    - name: Postgres is stopped if running
-      become: yes
-      service: name=postgresql
-               state=stopped
+    - name: Motd is updated
+      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
+
+#    - name: Postgres is stopped if running
+#      become: yes
+#      service: name=postgresql
+#               state=stopped
     
     - name: Postgres packages are absent
       become: yes
