@@ -4,3 +4,4 @@ geerlingguy.java
 geerlingguy.elasticsearch
 geerlingguy.nginx
 geerlingguy.nodejs
+ANXS.postgresql
