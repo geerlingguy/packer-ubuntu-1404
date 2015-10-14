@@ -35,7 +35,8 @@
         "{{pwd}}/roles/geerlingguy.elasticsearch",
         "{{pwd}}/roles/geerlingguy.java",
         "{{pwd}}/roles/geerlingguy.nodejs",
-        "{{pwd}}/roles/geerlingguy.nginx"
+        "{{pwd}}/roles/geerlingguy.nginx",
+        "{{pwd}}/roles/ANXS.postgresql"
       ]
     }
   ],
