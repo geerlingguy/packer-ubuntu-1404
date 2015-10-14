@@ -28,6 +28,7 @@
     - geerlingguy.elasticsearch
     - geerlingguy.nginx
     - geerlingguy.nodejs
+    - ANXS.postgresql
 
   tasks:
     - apt: name="{{ item }}"
