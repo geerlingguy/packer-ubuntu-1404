@@ -1,0 +1,154 @@
+{
+  "variables": {
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_port": "22",
+    "ssh_wait_timeout": "90m",
+    "disk_size": "81920",
+    "vm_name": "packer-lymph-base",
+    "atlas_username": "mamachanko",
+    "atlas_buildname": "lymph-base",
+    "iso_checksum_type": "md5",
+    "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417"
+  },
+  "push": {
+    "name": "{{ user `atlas_username` }}/{{ user `atlas_buildname` }}",
+    "vcs": false
+  },
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/ansible.sh"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/main.yml",
+      "role_paths": [
+        "{{pwd}}/roles/geerlingguy.packer-debian",
+        "{{pwd}}/roles/geerlingguy.nfs",
+        "{{pwd}}/roles/geerlingguy.elasticsearch",
+        "{{pwd}}/roles/geerlingguy.java",
+        "{{pwd}}/roles/geerlingguy.nodejs",
+        "{{pwd}}/roles/geerlingguy.nginx"
+      ]
+    }
+  ],
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "vm_name": "{{ user `vm_name` }}-{{ .Provider }}",
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto=true",
+        " priority=critical",
+        " initrd=/install/initrd.gz",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- ",
+        "<enter>"
+      ],
+      "disk_size": "{{ user `disk_size` }}",
+      "guest_os_type": "Ubuntu_64",
+      "headless": true,
+      "http_directory": "http",
+      "iso_urls": [
+        "iso/ubuntu-14.04.3-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso"
+      ],
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_port": "{{ user `ssh_port` }}",
+      "ssh_wait_timeout": "{{ user `ssh_wait_timeout` }}",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ]
+    },
+    {
+      "type": "qemu",
+      "accelerator": "kvm",
+      "vm_name": "{{ user `vm_name` }}-{{ .Provider }}",
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto=true",
+        " priority=critical",
+        " initrd=/install/initrd.gz",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- ",
+        "<enter>"
+      ],
+      "disk_size": "{{ user `disk_size`}}",
+      "headless": true,
+      "http_directory": "http",
+      "iso_urls": [
+        "iso/ubuntu-14.04.3-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso"
+      ],
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_port": "{{ user `ssh_port` }}",
+      "ssh_wait_timeout": "{{ user `ssh_wait_timeout` }}",
+      "shutdown_command": "echo '{{ user `ssh_password` }}' | sudo -S shutdown -P now"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": true
+      },
+      {
+        "type": "atlas",
+        "only": [
+          "virtualbox-iso"
+        ],
+        "artifact": "{{ user `atlas_username` }}/{{ user `atlas_buildname` }}",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "virtualbox",
+          "version": "{{ user `version` }}"
+        }
+      },
+      {
+        "type": "atlas",
+        "only": [
+          "qemu"
+        ],
+        "artifact": "{{ user `atlas_username` }}/{{ user `atlas_buildname` }}",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "libvirt",
+          "version": "{{ user `version` }}"
+        }
+      }
+    ]
+  ]
+}
