@@ -4,7 +4,7 @@
   gather_facts: yes
 
   vars:
-   - postgresql_version: 9.3
+   - postgresql_version: 9.4
    - postgresql_ext_install_postgis: yes
    - postgresql_max_prepared_transactions: 10
    - postgresql_databases:
@@ -20,6 +20,28 @@
    - postgresql_pg_hba_trust_hosts:
      - local
      - 127.0.0.1
+
+  pre_tasks:
+    - name: Package index is updated
+      apt: update_cache=yes
+           cache_valid_time=3600
+
+    - name: Locales are set
+      lineinfile: state=present
+                  dest=/etc/default/locale
+                  line="\"{{ item }}=en_US.UTF-8\""
+      with_items:
+        - LANG
+        - LANGUAGE
+        - LC_ALL
+    
+    - name: Locales are generated
+      shell: "{{ item }}"
+      with_items:
+        - locale-gen en_US en_US.UTF-8
+        - dpkg-reconfigure locales
+      args:
+        creates: /var/lib/locales/supported.d/local
 
   roles:
     - geerlingguy.nfs
@@ -80,25 +102,6 @@
     - name: Virtualenv is present
       pip: name=virtualenv
            extra_args='-I'
-
-    - name: Locales are set
-      become: yes
-      lineinfile: state=present
-                  dest=/etc/default/locale
-                  line="\"{{ item }}=en_US.UTF-8\""
-      with_items:
-        - LANG
-        - LANGUAGE
-        - LC_ALL
-    
-    - name: Locales are generated
-      become: yes
-      shell: "{{ item }}"
-      with_items:
-        - locale-gen en_US en_US.UTF-8
-        - dpkg-reconfigure locales
-      args:
-        creates: /var/lib/locales/supported.d/local
 
     - name: Motd is updated
       command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
