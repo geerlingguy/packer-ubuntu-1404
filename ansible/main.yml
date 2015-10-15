@@ -8,22 +8,9 @@
       apt: update_cache=yes
            cache_valid_time=3600
 
-    - name: Locales are set
-      lineinfile: state=present
-                  dest=/etc/default/locale
-                  line="\"{{ item }}=en_US.UTF-8\""
-      with_items:
-        - LANG
-        - LANGUAGE
-        - LC_ALL
-    
-    - name: Locales are generated
-      shell: "{{ item }}"
-      with_items:
-        - locale-gen en_US en_US.UTF-8
-        - dpkg-reconfigure locales
-      args:
-        creates: /var/lib/locales/supported.d/local
+    - name: Locale is set
+      locale_gen: name=en_US.UTF-8
+                  state=present
 
   roles:
     - geerlingguy.nfs
