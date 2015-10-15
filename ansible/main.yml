@@ -26,14 +26,6 @@
            state=installed
       with_items: ancillary_packages
 
-    - name: Middleware is running
-      service: name="{{ item }}"
-               state=started
-               enabled=yes
-      with_items:
-        - redis-server
-        - zookeeper
-
     - name: Hosts are present
       lineinfile: dest=/etc/hosts
                   line="127.0.0.1 {{ item }}"
