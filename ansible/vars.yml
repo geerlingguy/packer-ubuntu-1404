@@ -1,0 +1,14 @@
+postgresql_version: 9.4
+postgresql_ext_install_postgis: yes
+postgresql_max_prepared_transactions: 10
+postgresql_databases:
+  - name: vagrant
+postgresql_users:
+  - name: vagrant
+    pass: vagrant
+    encrypted: no
+postgresql_user_privileges:
+  - name: vagrant
+    priv: "ALL"
+    db: vagrant
+    role_attr_flags: "SUPERUSER"
