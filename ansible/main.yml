@@ -24,28 +24,7 @@
   tasks:
     - apt: name="{{ item }}"
            state=installed
-      with_items:
-        # libs
-        - gcc
-        - build-essential
-        - python-dev
-        - python-virtualenv
-        - python-setuptools
-        - libpq-dev
-        - libssl-dev
-        - libffi-dev
-        - libjpeg-dev
-        # middleware
-        - rabbitmq-server
-        - redis-server
-        - zookeeper
-        - zookeeperd
-        # tools
-        - git
-        - wget
-        - curl
-        - vim
-        - tmux
+      with_items: ancillary_packages
 
     - name: Middleware is running
       service: name="{{ item }}"
