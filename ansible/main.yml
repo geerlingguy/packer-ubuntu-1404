@@ -39,6 +39,11 @@
     - name: Pip is present
       shell: curl https://bootstrap.pypa.io/get-pip.py | python
 
+    - name: Python packages are present
+      pip: name="{{ item }}"
+           state=present
+      with_items: pip_packages
+
     - name: Virtualenv is present
       pip: name=virtualenv
            extra_args='-I'

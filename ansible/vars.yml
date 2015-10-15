@@ -20,7 +20,9 @@ ancillary_packages:
   - curl
   - vim
   - tmux
-
+pip_packages:
+  - httpie
+  - lymph
 postgresql_version: 9.4
 postgresql_ext_install_postgis: yes
 postgresql_max_prepared_transactions: 10
