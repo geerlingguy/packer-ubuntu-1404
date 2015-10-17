@@ -3,6 +3,9 @@
   sudo: yes
   gather_facts: yes
 
+  vars_files:
+    - vars.yml
+
   pre_tasks:
     - name: Package index is updated
       apt: update_cache=yes
@@ -22,9 +25,10 @@
     - ANXS.postgresql
 
   tasks:
-    - apt: name="{{ item }}"
-           state=installed
-      with_items: ancillary_packages
+    - name: Ancillary packages are present
+      apt: name="{{ item }}"
+           state=present
+      with_items: "{{ ancillary_packages }}"
 
     - name: Hosts are present
       lineinfile: dest=/etc/hosts
@@ -42,7 +46,7 @@
     - name: Python packages are present
       pip: name="{{ item }}"
            state=present
-      with_items: pip_packages
+      with_items: "{{ pip_packages }}"
 
     - name: Virtualenv is present
       pip: name=virtualenv
