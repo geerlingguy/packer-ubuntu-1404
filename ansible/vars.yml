@@ -24,6 +24,7 @@ ancillary_packages:
   - tmux
   - tree
   - ack-grep
+  - jq
 pip_packages:
   - httpie
   - ipdb
