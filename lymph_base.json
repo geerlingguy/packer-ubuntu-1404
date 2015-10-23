@@ -2,7 +2,7 @@
   "variables": {
     "atlas_username": "mamachanko",
     "atlas_buildname": "lymph-base",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
     "ssh_port": "22",
