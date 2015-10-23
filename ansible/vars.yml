@@ -26,7 +26,11 @@ ancillary_packages:
   - ack-grep
 pip_packages:
   - httpie
-  - lymph
+  - ipdb
+  - ipython
+  - redis
+  - requests
+  - virtualenv
 postgresql_version: 9.4
 postgresql_ext_install_postgis: yes
 postgresql_max_prepared_transactions: 10

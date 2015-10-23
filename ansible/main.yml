@@ -44,13 +44,11 @@
       shell: curl https://bootstrap.pypa.io/get-pip.py | python
 
     - name: Python packages are present
-      pip: name="{{ item }}"
-           state=present
+      pip: >
+        name="{{ item }}"
+        state=present
+        extra_args='-I'
       with_items: "{{ pip_packages }}"
-
-    - name: Virtualenv is present
-      pip: name=virtualenv
-           extra_args='-I'
 
     - name: Motd is updated
       command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
