@@ -9,6 +9,8 @@ ancillary_packages:
   - libssl-dev
   - libffi-dev
   - libjpeg-dev
+  - libyaml-syck-perl
+  - libzmq3-dev
   # middleware
   - rabbitmq-server
   - redis-server
@@ -20,6 +22,8 @@ ancillary_packages:
   - curl
   - vim
   - tmux
+  - tree
+  - ack-grep
 pip_packages:
   - httpie
   - lymph
