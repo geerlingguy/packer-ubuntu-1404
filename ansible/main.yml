@@ -3,14 +3,59 @@
   sudo: yes
   gather_facts: yes
 
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    - name: Package index is updated
+      apt: >
+        update_cache=yes
+        cache_valid_time=3600
+
+    - name: Locale is generated
+      locale_gen: >
+        name=en_US.UTF-8
+        state=present
+
   roles:
     - geerlingguy.nfs
     - geerlingguy.packer-debian
+    - geerlingguy.java
+    - geerlingguy.elasticsearch
+    - geerlingguy.nginx
+    - geerlingguy.nodejs
+    - ANXS.postgresql
 
   tasks:
-    - apt: "name={{ item }} state=installed"
+    - name: Packages are present
+      apt: >
+        name="{{ item }}"
+        state=present
+      with_items: "{{ ancillary_packages }}"
+
+    - name: Hosts are present
+      lineinfile: >
+        dest=/etc/hosts
+        line="127.0.0.1 {{ item }}"
       with_items:
-        - git
-        - wget
-        - curl
-        - vim
+        - es
+        - postgres
+        - rabbitmq
+        - redis
+        - zk
+
+    - name: Pip is present
+      shell: curl https://bootstrap.pypa.io/get-pip.py | python
+
+    - name: Python packages are present
+      pip: >
+        name="{{ item }}"
+        state=present
+        extra_args='-I'
+      with_items: "{{ pip_packages }}"
+
+    - name: Motd is updated
+      lineinfile: >
+        dest=/etc/motd
+        create=yes
+        line="Welcome to the lymph base box. Happy developing :)\n"
