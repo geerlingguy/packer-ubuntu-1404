@@ -51,4 +51,7 @@
       with_items: "{{ pip_packages }}"
 
     - name: Motd is updated
-      command: "echo 'Welcome! This is the lymph base box built on top of Ubuntu 14.04. Happy, developing :)' > /etc/motd"
+      lineinfile: >
+        dest=/etc/motd
+        create=yes
+        line="Welcome to the lymph base box. Happy developing :)\n"
