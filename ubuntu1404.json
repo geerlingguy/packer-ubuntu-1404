@@ -45,11 +45,11 @@
       "headless": true,
       "http_directory": "http",
       "iso_urls": [
-        "iso/ubuntu-14.04.3-server-amd64.iso",
-        "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso"
+        "iso/ubuntu-14.04.4-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.4-server-amd64.iso"
       ],
       "iso_checksum_type": "md5",
-      "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+      "iso_checksum": "2ac1f3e0de626e54d05065d6f549fa3a",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -93,11 +93,11 @@
       "headless": true,
       "http_directory": "http",
       "iso_urls": [
-        "iso/ubuntu-14.04.3-server-amd64.iso",
-        "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso"
+        "iso/ubuntu-14.04.4-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.4-server-amd64.iso"
       ],
       "iso_checksum_type": "md5",
-      "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+      "iso_checksum": "2ac1f3e0de626e54d05065d6f549fa3a",
       "output_directory": "packer-ubuntu-14.04-amd64-vmware",
       "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
       "ssh_password": "vagrant",
