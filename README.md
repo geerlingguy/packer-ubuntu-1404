@@ -2,6 +2,11 @@
 
 **Current Ubuntu Version Used**: 14.04.1 (Not using the latest kernel due to [this bug](https://github.com/geerlingguy/packer-ubuntu-1604/issues/5))
 
+**Pre-built Vagrant Box**:
+
+  - [`vagrant init geerlingguy/ubuntu1404`](https://vagrantcloud.com/geerlingguy/boxes/ubuntu1404)
+  - See older versions: http://files.midwesternmac.com/
+
 This example build configuration installs and configures Ubuntu 14.04 x86_64 minimal using Ansible, and then generates two Vagrant box files, for:
 
   - VirtualBox
