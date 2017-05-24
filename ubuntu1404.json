@@ -1,4 +1,9 @@
 {
+
+  "variables": {
+    "perform_dist_upgrade": "true",
+    "vmware_install_open_vm_tools": "false"
+  },
   "provisioners": [
     {
       "type": "shell",
@@ -8,12 +13,30 @@
     {
       "type": "shell",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "script": "scripts/reboot.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}' '{{user `perform_dist_upgrade`}}' ",
+      "script": "scripts/dist-upgrade.sh",
+      "pause_before": "20s"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/reboot.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh",
+      "pause_before": "20s"
     },
     {
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
-      "galaxy_file": "requirements.yml"
+      "galaxy_file": "requirements.yml",
+      "extra_arguments": ["--extra-vars \"vmware_install_open_vm_tools={{user `vmware_install_open_vm_tools`}}\""]
     },
     {
       "type": "shell",
@@ -42,11 +65,11 @@
       "headless": true,
       "http_directory": "http",
       "iso_urls": [
-        "iso/ubuntu-14.04.1-server-amd64.iso",
-        "http://old-releases.ubuntu.com/releases/14.04.1/ubuntu-14.04.1-server-amd64.iso"
+        "iso/ubuntu-14.04.5-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso"
       ],
       "iso_checksum_type": "sha256",
-      "iso_checksum": "946a6077af6f5f95a51f82fdc44051c7aa19f9cfc5f737954845a6050543d7c2",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -90,11 +113,11 @@
       "headless": true,
       "http_directory": "http",
       "iso_urls": [
-        "iso/ubuntu-14.04.1-server-amd64.iso",
-        "http://old-releases.ubuntu.com/releases/14.04.1/ubuntu-14.04.1-server-amd64.iso"
+        "iso/ubuntu-14.04.5-server-amd64.iso",
+        "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso"
       ],
       "iso_checksum_type": "sha256",
-      "iso_checksum": "946a6077af6f5f95a51f82fdc44051c7aa19f9cfc5f737954845a6050543d7c2",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "output_directory": "packer-ubuntu-14.04-amd64-vmware",
       "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
       "ssh_password": "vagrant",
