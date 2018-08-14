@@ -1,6 +1,6 @@
 # Packer Example - Ubuntu 14.04 minimal Vagrant Box
 
-**Current Ubuntu Version Used**: 14.04.1 (Not using the latest kernel due to [this bug](https://github.com/geerlingguy/packer-ubuntu-1604/issues/5))
+**Current Ubuntu Version Used**: 14.04.4
 
 **Pre-built Vagrant Box**:
 
