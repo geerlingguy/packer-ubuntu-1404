@@ -1,5 +1,7 @@
 # Packer Example - Ubuntu 14.04 minimal Vagrant Box
 
+> **DEPRECATED**: This project is no longer maintained, and though the base box is still available on Vagrant Cloud/Atlas, it will not be updated anymore as of 2019. Ubuntu 14.04 no longer receives active support from Canonical, therefore any users still running this version should upgrade to a newer, supported Ubuntu release.
+
 **Current Ubuntu Version Used**: 14.04.5
 
 **Pre-built Vagrant Box**:
